@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Helixion Innovation LLP | Engineering Digital Solutions for Tomorrow</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #2563eb;
+      --accent-glow: rgba(37, 99, 235, 0.4);
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+    h1, h2, h3, h4, .font-heading {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .font-mono {
+      font-family: 'JetBrains+Mono', monospace;
+    }
+
+    /* --- TECH BACKGROUND ANIMATIONS --- */
+    .neural-mesh {
+      background-image: 
+        radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
+      background-size: 40px 40px;
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+    }
+
+    .glow-line {
+      position: absolute;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      height: 1px;
+      width: 100%;
+      opacity: 0.2;
+      animation: scan 8s linear infinite;
+    }
+
+    @keyframes scan {
+      0% { top: -10%; }
+      100% { top: 110%; }
+    }
+
+    @keyframes pulse-ring {
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { opacity: 0.3; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    .pulse-ring {
+      position: absolute;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      animation: pulse-ring 4s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+    }
+
+    /* --- ARCHITECTURAL FLOW ANIMATIONS --- */
+    @keyframes dash {
+      to { stroke-dashoffset: -20; }
+    }
+    .animate-flow-line {
+      stroke-dasharray: 5;
+      animation: dash 1s linear infinite;
+    }
+
+    .node-pulse {
+      animation: nodePulse 2s infinite ease-in-out;
+    }
+    @keyframes nodePulse {
+      0%, 100% { filter: drop-shadow(0 0 2px var(--accent)); transform: scale(1); }
+      50% { filter: drop-shadow(0 0 10px var(--accent)); transform: scale(1.1); }
+    }
+
+    /* --- 3D UTILS --- */
+    .perspective-2000 { perspective: 2000px; }
+    .preserve-3d { transform-style: preserve-3d; }
+    .translate-z-128 { transform: translateZ(128px); }
+    .translate-z-0 { transform: translateZ(0); }
+
+    @keyframes spin-slow {
+      from { transform: rotateX(0deg) rotateY(0deg); }
+      to { transform: rotateX(360deg) rotateY(360deg); }
+    }
+    .animate-spin-slow {
+      animation: spin-slow 20s linear infinite;
+    }
+
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* --- MARQUEE --- */
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-marquee {
+      animation: marquee 30s linear infinite;
+    }
+
+    /* --- GLASS STYLES --- */
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    .shimmer-text {
+      background: linear-gradient(90deg, #60a5fa, #ffffff, #60a5fa);
+      background-size: 200% auto;
+      color: transparent;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: shimmer 5s linear infinite;
+    }
+
+    @keyframes shimmer {
+      to { background-position: 200% center; }
+    }
+
+    .cyber-border {
+      position: relative;
+    }
+    .cyber-border::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    /* Custom scrollbar for tech look */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.11.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-slate-950 text-slate-100">
+  <div class="neural-mesh"></div>
+  <div class="glow-line" style="animation-delay: 0s;"></div>
+  <div class="glow-line" style="animation-delay: 4s;"></div>
+  <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
