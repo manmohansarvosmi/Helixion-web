@@ -228,12 +228,22 @@ export function Footer({
             <ul className="space-y-3 text-xs sm:text-sm">
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
-                <span>Gwalior, Madhya Pradesh, India</span>
+                <div>
+                  <span className="block text-slate-300 font-semibold text-[11px] uppercase tracking-wider mb-0.5">Registered Office</span>
+                  <span>Gwalior, Madhya Pradesh, India</span>
+                </div>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <MapPin className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <div>
+                  <span className="block text-slate-300 font-semibold text-[11px] uppercase tracking-wider mb-0.5">Corporate Office</span>
+                  <span>Pimple Gurav, Pune, Maharashtra, India</span>
+                </div>
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-blue-400 shrink-0" />
-                <a href="tel:+919998887776" className="hover:text-blue-400 transition-colors whitespace-nowrap">
-                  +91 7880111641,+91 7756909607
+                <a href="tel:+917880111641" className="hover:text-blue-400 transition-colors whitespace-nowrap">
+                  +91 7880111641
                 </a>
               </li>
               <li className="flex items-start gap-2.5">

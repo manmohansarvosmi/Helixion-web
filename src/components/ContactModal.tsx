@@ -21,25 +21,46 @@ export function ContactModal({ isOpen, onClose, defaultService = '' }: ContactMo
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Google Apps Script Web App URL — replace with your deployed URL
+  const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL || '';
+
   if (!isOpen) return null;
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    setTimeout(() => {
-      setLoading(false);
-      setSubmitted(true);
-      try {
-        confetti({
-          particleCount: 80,
-          spread: 60,
-          origin: { y: 0.6 },
+    try {
+      if (GOOGLE_SCRIPT_URL) {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: formData.fullName,
+            email: formData.email,
+            phone: formData.phone,
+            subject: formData.service,
+            message: formData.message,
+            source: 'Contact Modal Form',
+          }),
         });
-      } catch (err) {
-        console.error(err);
       }
-    }, 600);
+    } catch (err) {
+      console.error('Form submission error:', err);
+    }
+
+    setLoading(false);
+    setSubmitted(true);
+    try {
+      confetti({
+        particleCount: 80,
+        spread: 60,
+        origin: { y: 0.6 },
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleReset = () => {
@@ -99,8 +120,9 @@ export function ContactModal({ isOpen, onClose, defaultService = '' }: ContactMo
               <div className="bg-slate-50 p-4 rounded-xl text-left text-xs space-y-1.5 max-w-md mx-auto border border-slate-100 mb-6">
                 <p className="text-slate-500">Contact Details:</p>
                 <p className="font-semibold text-slate-800">Email: info@helixioninnovation.com</p>
-                <p className="font-semibold text-slate-800">Phone: +91 999 888 7776</p>
-                <p className="text-slate-500">Office: Indore, Madhya Pradesh, India</p>
+                <p className="font-semibold text-slate-800">Phone: +91 7880111641</p>
+                <p className="text-slate-500">Registered Office: Gwalior, Madhya Pradesh, India</p>
+                <p className="text-slate-500">Corporate Office: Pimple Gurav, Pune, Maharashtra, India</p>
               </div>
               <button
                 onClick={handleReset}
@@ -191,10 +213,10 @@ export function ContactModal({ isOpen, onClose, defaultService = '' }: ContactMo
               <div className="pt-2 flex items-center justify-between">
                 <div className="flex items-center gap-4 text-xs text-slate-500">
                   <span className="flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5 text-blue-500" /> Indore, India
+                    <MapPin className="w-3.5 h-3.5 text-blue-500" /> Gwalior & Pune, India
                   </span>
                   <span className="flex items-center gap-1">
-                    <Phone className="w-3.5 h-3.5 text-blue-500" /> +91 999 888 7776
+                    <Phone className="w-3.5 h-3.5 text-blue-500" /> +91 7880111641
                   </span>
                 </div>
 

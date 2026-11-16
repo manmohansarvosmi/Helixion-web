@@ -1,7 +1,38 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, GraduationCap, Building2, Receipt, CheckCircle2, ArrowRight, Sparkles } from 'lucide-react';
+import { X, GraduationCap, Building2, Receipt, CheckCircle2, ArrowRight, Sparkles, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { ProductItem } from '../types';
+import erpDashboard from '../assetImage/erp-dashboard.png';
+import erpFeeManagement from '../assetImage/erp-fee-management.jpg';
+import erpTransport from '../assetImage/erp-transport.jpg';
+import erpAccounts from '../assetImage/erp-accounts.jpg';
+
+const erpScreenshots = [
+  {
+    title: 'School Overview & Key Performance Metrics',
+    tag: 'Executive Dashboard',
+    desc: 'Live enrollment, teacher & student attendance meters, collection & profit margin charts.',
+    image: erpDashboard,
+  },
+  {
+    title: 'Student Fee Management & Report Hub',
+    tag: 'Fee Hub',
+    desc: 'Class-wise student dues, fee vouchers, discount allocations, paid % and payment ledger.',
+    image: erpFeeManagement,
+  },
+  {
+    title: 'School Transport & Fleet Route Management',
+    tag: 'Transport',
+    desc: 'Driver allocation, vehicle number plates, designated bus stops, and route details.',
+    image: erpTransport,
+  },
+  {
+    title: 'Accounts, General Ledger & Finance Audit',
+    tag: 'Finance & Ledger',
+    desc: 'Bank accounts balances, cash in hand, categorized fee receipts, and running audit trail.',
+    image: erpAccounts,
+  },
+];
 
 interface ProductsModalProps {
   isOpen: boolean;
@@ -89,6 +120,7 @@ export function ProductsModal({
   onOpenContact,
 }: ProductsModalProps) {
   const [activeTab, setActiveTab] = useState<string>(selectedProductId || 'school-erp');
+  const [activeScreenshotIdx, setActiveScreenshotIdx] = useState(0);
 
   if (!isOpen) return null;
 
@@ -198,6 +230,77 @@ export function ProductsModal({
               <p className="text-sm text-slate-600 leading-relaxed">
                 {currentProduct.description}
               </p>
+
+              {/* Real System Screenshots (For School ERP) */}
+              {currentProduct.id === 'school-erp' && (
+                <div className="bg-slate-900 rounded-xl p-4 sm:p-5 border border-slate-800 text-white">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3.5">
+                    <div>
+                      <h5 className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-[#0070f3]" />
+                        <span>Live System Preview (Progressive Public School)</span>
+                      </h5>
+                      <p className="text-[11px] text-slate-400">
+                        {erpScreenshots[activeScreenshotIdx].title}
+                      </p>
+                    </div>
+
+                    {/* Screenshot Selector Pills */}
+                    <div className="flex flex-wrap gap-1.5 bg-slate-800/80 p-1 rounded-lg">
+                      {erpScreenshots.map((item, idx) => (
+                        <button
+                          key={item.tag}
+                          onClick={() => setActiveScreenshotIdx(idx)}
+                          className={`px-2.5 py-1 text-[11px] font-semibold rounded transition-all cursor-pointer ${
+                            idx === activeScreenshotIdx
+                              ? 'bg-[#0070f3] text-white'
+                              : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
+                          }`}
+                        >
+                          {item.tag}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Screenshot Frame with Navigation */}
+                  <div className="relative rounded-lg overflow-hidden border border-slate-800 bg-slate-950 aspect-[16/8.5] flex items-center justify-center">
+                    <img
+                      src={erpScreenshots[activeScreenshotIdx].image}
+                      alt={erpScreenshots[activeScreenshotIdx].title}
+                      className="w-full h-full object-cover object-top"
+                    />
+
+                    {/* Controls */}
+                    <button
+                      onClick={() =>
+                        setActiveScreenshotIdx((prev) =>
+                          prev === 0 ? erpScreenshots.length - 1 : prev - 1
+                        )
+                      }
+                      className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center cursor-pointer transition-all shadow-md"
+                      aria-label="Previous screenshot"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() =>
+                        setActiveScreenshotIdx((prev) =>
+                          (prev + 1) % erpScreenshots.length
+                        )
+                      }
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center cursor-pointer transition-all shadow-md"
+                      aria-label="Next screenshot"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <p className="text-[11px] text-slate-400 mt-2 text-center sm:text-left">
+                    {erpScreenshots[activeScreenshotIdx].desc}
+                  </p>
+                </div>
+              )}
 
               {/* Key Features Grid */}
               <div>

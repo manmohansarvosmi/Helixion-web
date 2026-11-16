@@ -38,23 +38,41 @@ export function AboutPage({ onNavigateHome, onOpenContact }: AboutPageProps) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: FormEvent) => {
+  // Google Apps Script Web App URL — replace with your deployed URL
+  const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL || '';
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email) return;
     setIsSubmitting(true);
+
+    try {
+      if (GOOGLE_SCRIPT_URL) {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...formData,
+            source: 'About Page Contact Form',
+          }),
+        });
+      }
+    } catch (err) {
+      console.error('Form submission error:', err);
+    }
+
+    setIsSubmitting(false);
+    setIsSubmitted(true);
     setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      setTimeout(() => {
-        setIsSubmitted(false);
-        setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
-      }, 4000);
-    }, 600);
+      setIsSubmitted(false);
+      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+    }, 4000);
   };
 
   return (
     <div id="about-us-page" className="w-full flex flex-col select-none">
-      
+
       {/* 1. Hero Banner Image */}
       <section className="relative w-full bg-[#071326] overflow-hidden">
         <img
@@ -67,7 +85,7 @@ export function AboutPage({ onNavigateHome, onOpenContact }: AboutPageProps) {
       {/* 2. Section: Our Story */}
       <section id="our-story" className="w-full bg-white py-16 sm:py-20 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           {/* Section Title with Underline */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -84,7 +102,7 @@ export function AboutPage({ onNavigateHome, onOpenContact }: AboutPageProps) {
 
           {/* Two Column Layout: Text & Stats on Left, Office Scene on Right */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-            
+
             {/* Left Column: How We Started */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -96,11 +114,11 @@ export function AboutPage({ onNavigateHome, onOpenContact }: AboutPageProps) {
               <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4">
                 How We Started
               </h3>
-              
+
               <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-4">
                 Helixion Innovation was founded with a simple idea – to use technology to solve real-world problems and help businesses grow.
               </p>
-              
+
               <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-8">
                 What started as a small team of enthusiastic developers has grown into a trusted digital solutions company serving clients across industries.
               </p>
@@ -167,7 +185,7 @@ export function AboutPage({ onNavigateHome, onOpenContact }: AboutPageProps) {
       {/* 3. Section: Our Vision & Mission */}
       <section id="vision-mission" className="w-full bg-[#f8fafc] py-16 sm:py-20 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           {/* Section Title with Underline */}
           <div className="text-center mb-12 sm:mb-14">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-2">
@@ -178,7 +196,7 @@ export function AboutPage({ onNavigateHome, onOpenContact }: AboutPageProps) {
 
           {/* 2 Feature Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-            
+
             {/* Card 1: Our Vision */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
@@ -231,7 +249,7 @@ export function AboutPage({ onNavigateHome, onOpenContact }: AboutPageProps) {
       {/* 4. Section: The Impact We Create */}
       <section id="impact-section" className="w-full bg-white py-16 sm:py-20 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           {/* Section Title */}
           <div className="text-center mb-12 sm:mb-14">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -241,7 +259,7 @@ export function AboutPage({ onNavigateHome, onOpenContact }: AboutPageProps) {
 
           {/* 5 Impact Columns */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-4 lg:gap-6">
-            
+
             {/* 1. Operational Efficiency */}
             <div className="flex flex-col items-center text-center p-4 rounded-xl hover:bg-slate-50/80 transition-colors">
               <div className="w-12 h-12 rounded-lg flex items-center justify-center text-[#0070f3] mb-3.5">
@@ -315,9 +333,9 @@ export function AboutPage({ onNavigateHome, onOpenContact }: AboutPageProps) {
       {/* 5. Section: Get In Touch & Send Us a Message */}
       <section id="contact-banner" className="w-full bg-[#f8fafc] py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-            
+
             {/* Left Column: Get In Touch with World Map Dot Matrix */}
             <div className="lg:col-span-5 flex flex-col items-start text-left relative">
               <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-6">
@@ -326,14 +344,25 @@ export function AboutPage({ onNavigateHome, onOpenContact }: AboutPageProps) {
 
               {/* Contact Information List with Blue Outline Icons */}
               <div className="space-y-4 text-xs sm:text-sm text-slate-700 w-full relative z-10 mb-8">
-                {/* Office */}
+                {/* Registered Office */}
                 <div className="flex items-start gap-3.5">
                   <div className="w-8 h-8 rounded-full bg-blue-50 text-[#0070f3] flex items-center justify-center shrink-0 mt-0.5">
                     <MapPin className="w-4 h-4" />
                   </div>
                   <div>
-                    <span className="block font-bold text-slate-900">Our Office</span>
-                    <span className="text-slate-600">Indore, Madhya Pradesh, India</span>
+                    <span className="block font-bold text-slate-900">Registered Office</span>
+                    <span className="text-slate-600">Gwalior, Madhya Pradesh, India</span>
+                  </div>
+                </div>
+
+                {/* Corporate Office */}
+                <div className="flex items-start gap-3.5">
+                  <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
+                    <MapPin className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="block font-bold text-slate-900">Corporate Office</span>
+                    <span className="text-slate-600">Pimple Gurav, Pune, Maharashtra, India</span>
                   </div>
                 </div>
 
@@ -344,8 +373,8 @@ export function AboutPage({ onNavigateHome, onOpenContact }: AboutPageProps) {
                   </div>
                   <div>
                     <span className="block font-bold text-slate-900">Phone</span>
-                    <a href="tel:+919998887776" className="text-slate-600 hover:text-[#0070f3] transition-colors">
-                      +91 999 888 7776
+                    <a href="tel:+917880111641" className="text-slate-600 hover:text-[#0070f3] transition-colors">
+                      +91 7880111641
                     </a>
                   </div>
                 </div>

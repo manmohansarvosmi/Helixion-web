@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Factory,
@@ -6,11 +6,6 @@ import {
   GraduationCap,
   ShoppingBag,
   Truck,
-  CheckCircle2,
-  ArrowRight,
-  Sparkles,
-  TrendingUp,
-  Zap,
 } from 'lucide-react';
 
 interface IndustriesSectionProps {
@@ -21,357 +16,282 @@ const industries = [
   {
     id: 'manufacturing',
     name: 'Manufacturing',
+    shortName: 'Manufacturing',
     fullName: 'Manufacturing & Heavy Industry',
-    tagline: 'Smart Factory & Industrial IoT',
     icon: Factory,
-    gradient: 'from-amber-500 via-orange-500 to-red-500',
-    bgLight: 'bg-orange-50 text-orange-600 border-orange-200',
-    bgDarkGlow: 'from-orange-500/20 to-amber-500/5',
-    borderGlow: 'border-orange-500/30 hover:border-orange-500/60',
-    badgeBg: 'bg-orange-500/15 text-orange-300 border-orange-500/30',
-    iconBg: 'bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-orange-500/30',
+    accentColor: '#f59e0b',
     summary:
-      'We empower smart factories with industrial IoT telemetry, predictive machinery maintenance, quality vision inspections, and unified shop-floor ERP integration.',
-    solutions: [
-      'Shop-Floor SCADA / MES Digitalization',
-      'AI Vision-Based Defect Detection',
-      'Predictive Equipment Maintenance',
-      'Multi-Plant Inventory Traceability',
-    ],
-    metric: '30%',
-    metricLabel: 'Reduction in equipment downtime',
-    stats: [
-      { label: 'SCADA Integration', val: '100%' },
-      { label: 'Plant Efficiency', val: '+24%' },
-    ],
+      'Unlock superior production efficiency and performance with our expertly designed and developed smart factory solutions, IoT platforms, & industrial automation apps.',
+    clients: ['TATA Steel', 'Jindal', 'Mahindra', 'Bosch', 'L&T'],
   },
   {
     id: 'healthcare',
     name: 'Healthcare',
+    shortName: 'Health Care',
     fullName: 'Healthcare & Life Sciences',
-    tagline: 'Telehealth & Clinical Data Systems',
     icon: HeartPulse,
-    gradient: 'from-rose-500 via-pink-500 to-purple-500',
-    bgLight: 'bg-rose-50 text-rose-600 border-rose-200',
-    bgDarkGlow: 'from-rose-500/20 to-pink-500/5',
-    borderGlow: 'border-rose-500/30 hover:border-rose-500/60',
-    badgeBg: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
-    iconBg: 'bg-gradient-to-br from-rose-500 to-pink-600 text-white shadow-rose-500/30',
+    accentColor: '#ec4899',
     summary:
-      'HIPAA-compliant telehealth suites, clinical data orchestration platforms, diagnostic image analyzers, and secure patient EHR management systems.',
-    solutions: [
-      'Telemedicine & Remote Patient Monitoring',
-      'Electronic Health Records (EHR)',
-      'Diagnostic AI & Clinical Decision Engines',
-      'Medical Device Integration & Compliance',
-    ],
-    metric: '99.99%',
-    metricLabel: 'Uptime for critical workflows',
-    stats: [
-      { label: 'HIPAA Compliant', val: 'Verified' },
-      { label: 'Response Speed', val: '<50ms' },
-    ],
+      'Unlock superior patient experiences and performance with our expertly designed and developed telehealth platforms, clinical data systems, & healthcare web apps.',
+    clients: ['Apollo', 'Medanta', 'Fortis', 'Max Health', 'Narayana'],
   },
   {
     id: 'education',
     name: 'Education',
+    shortName: 'EdTech',
     fullName: 'Education & EdTech',
-    tagline: 'Digital Campus & Adaptive LMS',
     icon: GraduationCap,
-    gradient: 'from-violet-500 via-indigo-500 to-blue-500',
-    bgLight: 'bg-violet-50 text-violet-600 border-violet-200',
-    bgDarkGlow: 'from-violet-500/20 to-indigo-500/5',
-    borderGlow: 'border-violet-500/30 hover:border-violet-500/60',
-    badgeBg: 'bg-violet-500/15 text-violet-300 border-violet-500/30',
-    iconBg: 'bg-gradient-to-br from-violet-500 to-indigo-600 text-white shadow-violet-500/30',
+    accentColor: '#8b5cf6',
     summary:
-      'Scalable Learning Management Systems, adaptive assessment engines, interactive virtual classrooms, and automated institutional governance tools.',
-    solutions: [
-      'Cloud-Native Multi-Tenant LMS',
-      'AI Adaptive Learning Path Generators',
-      'Live Video Lecture & Whiteboards',
-      'Student Information & Fee Portals',
-    ],
-    metric: '2.5M+',
-    metricLabel: 'Active learners supported live',
-    stats: [
-      { label: 'Student Engagement', val: '+45%' },
-      { label: 'Exam Automation', val: 'Instant' },
-    ],
+      'Unlock superior learning experiences and performance with our expertly designed and developed LMS platforms, virtual classrooms, & educational web apps.',
+    clients: ['Byju\'s', 'Unacademy', 'Vedantu', 'Toppr', 'Classplus'],
   },
   {
     id: 'retail',
     name: 'Retail',
+    shortName: 'E-Commerce',
     fullName: 'Retail & E-Commerce',
-    tagline: 'Omnichannel Commerce & POS',
     icon: ShoppingBag,
-    gradient: 'from-emerald-500 via-teal-500 to-cyan-500',
-    bgLight: 'bg-emerald-50 text-emerald-600 border-emerald-200',
-    bgDarkGlow: 'from-emerald-500/20 to-teal-500/5',
-    borderGlow: 'border-emerald-500/30 hover:border-emerald-500/60',
-    badgeBg: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
-    iconBg: 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-emerald-500/30',
+    accentColor: '#10b981',
     summary:
-      'Unified omnichannel commerce platforms, headless storefronts, intelligent recommendation engines, and dynamic supply chain replenishment algorithms.',
-    solutions: [
-      'Headless Commerce & PWA Storefronts',
-      'Real-Time Omnichannel Inventory Sync',
-      'Personalized Recommendation Engines',
-      'POS Modernization & Cloud Integration',
-    ],
-    metric: '+42%',
-    metricLabel: 'Uplift in customer conversion',
-    stats: [
-      { label: 'Page Speed', val: '0.4s' },
-      { label: 'Cart Conversion', val: '3.8x' },
-    ],
+      'Unlock superior user experiences and performance with our expertly designed and developed commerce apps, headless storefronts, & retail web apps.',
+    clients: ['Flipkart', 'Myntra', 'BigBasket', 'Nykaa', 'Meesho'],
   },
   {
     id: 'logistics',
     name: 'Logistics',
+    shortName: 'Logistics',
     fullName: 'Logistics & Supply Chain',
-    tagline: 'GPS Telematics & Fleet Tracking',
     icon: Truck,
-    gradient: 'from-sky-500 via-blue-500 to-indigo-600',
-    bgLight: 'bg-sky-50 text-sky-600 border-sky-200',
-    bgDarkGlow: 'from-sky-500/20 to-blue-500/5',
-    borderGlow: 'border-sky-500/30 hover:border-sky-500/60',
-    badgeBg: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
-    iconBg: 'bg-gradient-to-br from-sky-500 to-blue-600 text-white shadow-sky-500/30',
+    accentColor: '#3b82f6',
     summary:
-      'End-to-end fleet tracking systems, route optimization algorithms, warehouse management software, and automated freight compliance portals.',
-    solutions: [
-      'Dynamic Route Planning & Fuel Optimization',
-      'Automated Warehouse Management (WMS)',
-      'Real-Time GPS Fleet Telematics',
-      'Freight Rate & Customs Automation',
-    ],
-    metric: '-18%',
-    metricLabel: 'Decrease in route transit costs',
-    stats: [
-      { label: 'Route Efficiency', val: '+35%' },
-      { label: 'On-Time Deliveries', val: '99.4%' },
-    ],
+      'Unlock superior fleet tracking and performance with our expertly designed and developed logistics platforms, route optimization, & supply chain web apps.',
+    clients: ['Delhivery', 'BlueDart', 'Rivigo', 'Ecom Express', 'XpressBees'],
   },
+];
+
+// Positions for orbital client labels (5 positions around a circle)
+const orbitPositions = [
+  { x: 50, y: 2 },    // top center
+  { x: 92, y: 28 },   // top-right
+  { x: 82, y: 78 },   // bottom-right
+  { x: 18, y: 78 },   // bottom-left
+  { x: 8, y: 28 },    // top-left
 ];
 
 export function IndustriesSection({ onOpenContact }: IndustriesSectionProps) {
   const [activeId, setActiveId] = useState('manufacturing');
+  const [orbitAngle, setOrbitAngle] = useState(0);
   const active = industries.find((i) => i.id === activeId) || industries[0];
-  const IconComponent = active.icon;
+
+  // Slow rotating orbit animation for decorative dots
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setOrbitAngle((prev) => (prev + 0.15) % 360);
+    }, 50);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <section
       id="industries"
-      className="w-full bg-[#f8fafc] py-20 border-t border-slate-100 select-none overflow-hidden"
+      className="w-full bg-white py-20 lg:py-28 select-none overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-6 items-center min-h-[500px]">
 
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="text-center max-w-3xl mx-auto mb-12"
-        >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/60 text-[#0070f3] text-xs font-bold uppercase tracking-wider mb-3.5 shadow-xs">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Industries We Serve</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#071326] tracking-tight mb-4">
-            Solutions Across Industries
-          </h2>
-          <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-            We bring deep domain expertise and cutting-edge technology to solve complex challenges across key industry verticals.
-          </p>
-        </motion.div>
-
-        {/* Top Interactive Tabs Bar */}
-        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10">
-          {industries.map((ind) => {
-            const TabIcon = ind.icon;
-            const isActive = ind.id === activeId;
-            return (
-              <button
-                key={ind.id}
-                id={`industry-tab-${ind.id}`}
-                onClick={() => setActiveId(ind.id)}
-                className={`relative flex items-center gap-2.5 px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 cursor-pointer ${
-                  isActive
-                    ? 'bg-[#071326] text-white shadow-lg shadow-slate-900/20 scale-[1.02]'
-                    : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200/80 hover:border-slate-300 hover:bg-slate-50'
-                }`}
+          {/* ─── LEFT COLUMN — Text Content (5 cols) ─── */}
+          <div className="lg:col-span-4 flex flex-col justify-center">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={active.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4, ease: 'easeInOut' }}
               >
-                <div
-                  className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors ${
-                    isActive ? ind.iconBg : 'bg-slate-100 text-slate-600'
-                  }`}
+                <h2 className="text-3xl sm:text-4xl lg:text-[2.6rem] font-bold text-[#0a192f] leading-[1.15] mb-5">
+                  Digital Innovation for{' '}
+                  <br />
+                  <span style={{ color: active.accentColor }}>
+                    {active.name}
+                  </span>
+                </h2>
+                <p className="text-slate-500 text-[15px] leading-relaxed mb-8 max-w-sm">
+                  {active.summary}
+                </p>
+                <motion.button
+                  onClick={onOpenContact}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="inline-flex items-center gap-2 bg-[#0a192f] hover:bg-[#112240] text-white text-sm font-semibold px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer"
                 >
-                  <TabIcon className="w-4 h-4" />
-                </div>
-                <span>{ind.name}</span>
-                {isActive && (
-                  <motion.div
-                    layoutId="activeTabGlow"
-                    className="absolute -bottom-1 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-blue-500 to-sky-400"
-                    transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-                  />
-                )}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Main Heroic Feature Showcase Card */}
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#061224] via-[#091b36] to-[#040c1a] border border-slate-800 shadow-2xl text-white">
-          
-          {/* Ambient Background Glows */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <div className={`absolute top-0 right-1/4 w-96 h-96 bg-gradient-to-br ${active.bgDarkGlow} rounded-full blur-3xl`} />
-            <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl" />
+                  View projects
+                </motion.button>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={active.id}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.35, ease: 'easeInOut' }}
-              className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-0"
-            >
-              {/* Left Column: Sector Info & Metrics (Span 7) */}
-              <div className="lg:col-span-7 p-8 sm:p-10 lg:p-12 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-800/80">
-                <div>
-                  {/* Badge & Title */}
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className={`w-14 h-14 rounded-2xl ${active.iconBg} flex items-center justify-center shadow-lg transform -rotate-1`}>
-                      <IconComponent className="w-7 h-7" />
-                    </div>
-                    <div>
-                      <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border mb-1 ${active.badgeBg}`}>
-                        <Zap className="w-3 h-3" />
-                        <span>{active.tagline}</span>
-                      </div>
-                      <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                        {active.fullName}
-                      </h3>
-                    </div>
-                  </div>
+          {/* ─── CENTER COLUMN — Orbital Logo Ring (5 cols) ─── */}
+          <div className="lg:col-span-5 flex items-center justify-center py-8 lg:py-0">
+            <div className="relative w-[300px] h-[300px] sm:w-[360px] sm:h-[360px]">
 
-                  {/* Summary */}
-                  <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-8">
-                    {active.summary}
-                  </p>
+              {/* Outer faint orbit circle */}
+              <div className="absolute inset-2 rounded-full border border-dashed border-slate-200/60" />
+              {/* Middle orbit circle */}
+              <div className="absolute inset-10 rounded-full border border-slate-200/40" />
+              {/* Inner orbit circle */}
+              <div className="absolute inset-20 rounded-full border border-slate-100/60" />
 
-                  {/* Main Metric Highlight Banner */}
-                  <div className="relative rounded-2xl p-5 bg-slate-900/80 border border-slate-700/60 overflow-hidden mb-8 group hover:border-slate-600 transition-colors">
-                    <div className={`absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b ${active.gradient}`} />
-                    <div className="flex items-center gap-5 pl-2">
-                      <div className="flex flex-col">
-                        <span className={`text-3xl sm:text-4xl font-black tracking-tight bg-gradient-to-r ${active.gradient} bg-clip-text text-transparent`}>
-                          {active.metric}
-                        </span>
-                        <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                          Measured Impact
-                        </span>
-                      </div>
-                      <div className="h-10 w-px bg-slate-800" />
-                      <p className="text-xs sm:text-sm font-medium text-slate-200 leading-snug">
-                        {active.metricLabel}
-                      </p>
-                    </div>
-                  </div>
+              {/* Small orbiting dots */}
+              {[0, 72, 144, 216, 288].map((baseAngle, i) => {
+                const angle = ((baseAngle + orbitAngle) * Math.PI) / 180;
+                const radius = 44;
+                const cx = 50 + radius * Math.cos(angle);
+                const cy = 50 + radius * Math.sin(angle);
+                return (
+                  <div
+                    key={i}
+                    className="absolute w-1.5 h-1.5 rounded-full bg-slate-300/70"
+                    style={{
+                      left: `${cx}%`,
+                      top: `${cy}%`,
+                      transform: 'translate(-50%, -50%)',
+                    }}
+                  />
+                );
+              })}
 
-                  {/* Secondary Quick Stats */}
-                  <div className="grid grid-cols-2 gap-4 mb-8">
-                    {active.stats.map((st, i) => (
-                      <div key={i} className="bg-slate-900/40 border border-slate-800/80 p-3.5 rounded-xl flex flex-col">
-                        <span className="text-xs text-slate-400 font-medium mb-0.5">{st.label}</span>
-                        <span className="text-base font-bold text-white">{st.val}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Consult Button */}
-                <div className="pt-2">
-                  <motion.button
-                    id={`industry-contact-${active.id}`}
-                    onClick={onOpenContact}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-gradient-to-r ${active.gradient} text-white text-sm font-bold px-7 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer group`}
+              {/* Center Helixion Logo */}
+              <div className="absolute inset-0 flex items-center justify-center z-10">
+                <div className="w-20 h-20 sm:w-[88px] sm:h-[88px] rounded-full bg-gradient-to-br from-slate-50 to-white shadow-lg border border-slate-100 flex items-center justify-center">
+                  <svg
+                    viewBox="0 0 100 100"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-11 h-11 sm:w-12 sm:h-12"
                   >
-                    <span>Consult on {active.name}</span>
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </motion.button>
+                    <defs>
+                      <linearGradient id="indOrbitG1" x1="10%" y1="0%" x2="90%" y2="100%">
+                        <stop offset="0%" stopColor="#00a8ff" />
+                        <stop offset="50%" stopColor="#0070f3" />
+                        <stop offset="100%" stopColor="#0047ba" />
+                      </linearGradient>
+                      <linearGradient id="indOrbitG2" x1="0%" y1="50%" x2="100%" y2="50%">
+                        <stop offset="0%" stopColor="#0080ff" />
+                        <stop offset="100%" stopColor="#0056cc" />
+                      </linearGradient>
+                      <linearGradient id="indOrbitGF" x1="50%" y1="0%" x2="50%" y2="100%">
+                        <stop offset="0%" stopColor="#38bdf8" />
+                        <stop offset="100%" stopColor="#0284c7" />
+                      </linearGradient>
+                    </defs>
+                    <path d="M50 8 L88 28 L88 44 L68 34 L50 24 L32 34 L12 24 L50 8 Z" fill="url(#indOrbitG1)" />
+                    <path d="M12 28 L32 38 L32 72 L12 62 Z" fill="url(#indOrbitG2)" />
+                    <path d="M68 38 L88 48 L88 82 L68 72 Z" fill="url(#indOrbitG1)" />
+                    <path d="M12 66 L50 88 L88 70 L88 86 L50 98 L12 78 Z" fill="url(#indOrbitG2)" />
+                    <path d="M32 46 L68 46 L68 58 L32 58 Z" fill="url(#indOrbitGF)" />
+                    <path d="M48 24 L52 24 L68 34 L68 40 L50 28 L32 40 L32 34 Z" fill="#ffffff" fillOpacity="0.25" />
+                  </svg>
                 </div>
               </div>
 
-              {/* Right Column: Capabilities Cards Grid (Span 5) */}
-              <div className="lg:col-span-5 p-8 sm:p-10 lg:p-12 bg-slate-900/30 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-6">
-                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                      <TrendingUp className="w-4 h-4 text-blue-400" />
-                      <span>Specialized Capabilities</span>
-                    </h4>
-                    <span className="text-xs text-slate-500">4 Core Modules</span>
-                  </div>
-
-                  {/* 4 Feature Items */}
-                  <div className="space-y-3.5">
-                    {active.solutions.map((sol, idx) => (
+              {/* Client name labels floating around the orbit */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={active.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.35 }}
+                  className="absolute inset-0"
+                >
+                  {active.clients.map((client, idx) => {
+                    const pos = orbitPositions[idx];
+                    return (
                       <motion.div
-                        key={idx}
-                        initial={{ opacity: 0, x: 15 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: idx * 0.08 }}
-                        className="group flex items-start gap-3.5 bg-slate-900/70 hover:bg-slate-800/90 border border-slate-800 hover:border-slate-700 p-4 rounded-xl transition-all duration-200 shadow-sm"
+                        key={client}
+                        initial={{ opacity: 0, scale: 0.7 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.35, delay: idx * 0.06 }}
+                        className="absolute"
+                        style={{
+                          left: `${pos.x}%`,
+                          top: `${pos.y}%`,
+                          transform: 'translate(-50%, -50%)',
+                        }}
                       >
-                        <div className={`w-6 h-6 rounded-full ${active.badgeBg} flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-110 transition-transform`}>
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                        </div>
-                        <span className="text-xs sm:text-sm font-medium text-slate-200 leading-snug group-hover:text-white transition-colors">
-                          {sol}
+                        <span
+                          className="text-[13px] font-semibold whitespace-nowrap px-3 py-1.5 rounded-full bg-white/90 shadow-md border border-slate-100/80 backdrop-blur-sm"
+                          style={{ color: active.accentColor }}
+                        >
+                          {client}
                         </span>
                       </motion.div>
-                    ))}
-                  </div>
-                </div>
+                    );
+                  })}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
 
-                {/* Bottom Quick Switcher Bar */}
-                <div className="mt-8 pt-6 border-t border-slate-800/80">
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
-                    Explore Other Verticals
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {industries
-                      .filter((i) => i.id !== activeId)
-                      .map((ind) => {
-                        const MiniIcon = ind.icon;
-                        return (
-                          <button
-                            key={ind.id}
-                            onClick={() => setActiveId(ind.id)}
-                            className="flex items-center gap-1.5 text-xs font-medium text-slate-300 hover:text-white bg-slate-900/60 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 px-3 py-1.5 rounded-lg transition-all cursor-pointer"
-                          >
-                            <MiniIcon className="w-3.5 h-3.5 text-slate-400" />
-                            <span>{ind.name}</span>
-                          </button>
-                        );
-                      })}
-                  </div>
-                </div>
+          {/* ─── RIGHT COLUMN — Vertical Industry Tabs (3 cols) ─── */}
+          <div className="lg:col-span-3 flex items-center justify-center lg:justify-end">
+            {/* Mobile: horizontal scroll / Desktop: vertical tall tabs */}
+            <div className="flex flex-row lg:flex-row gap-0 h-auto lg:h-[440px]">
+              {industries.map((ind) => {
+                const isActive = ind.id === activeId;
+                return (
+                  <button
+                    key={ind.id}
+                    onClick={() => setActiveId(ind.id)}
+                    className={`relative flex items-center justify-center cursor-pointer transition-all duration-300 group ${
+                      isActive
+                        ? 'bg-[#0a192f] text-white shadow-xl z-10'
+                        : 'bg-white text-slate-400 hover:text-slate-600 hover:bg-slate-50'
+                    }`}
+                    style={{
+                      writingMode: 'vertical-rl',
+                      width: isActive ? '60px' : '52px',
+                      height: '100%',
+                      minHeight: '120px',
+                      borderLeft: isActive ? 'none' : '1px solid #e2e8f0',
+                      borderRight: isActive ? 'none' : '1px solid #e2e8f0',
+                      borderTop: '1px solid #e2e8f0',
+                      borderBottom: '1px solid #e2e8f0',
+                    }}
+                  >
+                    {/* Active accent line at top */}
+                    {isActive && (
+                      <motion.div
+                        layoutId="vTabAccent"
+                        className="absolute top-0 left-0 right-0 h-1"
+                        style={{ backgroundColor: active.accentColor }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                      />
+                    )}
 
-              </div>
-            </motion.div>
-          </AnimatePresence>
+                    <span
+                      className={`text-xs font-bold uppercase tracking-[0.2em] whitespace-nowrap ${
+                        isActive
+                          ? 'text-white'
+                          : 'text-slate-400 group-hover:text-slate-600'
+                      }`}
+                    >
+                      {ind.shortName}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
         </div>
+      </div>
 
+      {/* Subtle bottom border line */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+        <div className="h-px bg-slate-100" />
       </div>
     </section>
   );
